@@ -18,8 +18,8 @@ for c in range(len(ip[0])):
         ip1 = ip[0][0:c+1]
         break
 main_ip = ip1 + ip2
-print(main_ip)
-s1.connect((main_ip, 8054))
+#print(main_ip)
+s1.connect(('127.0.0.1', 8055))
 
 message = input()
 m = message.encode('utf-8')
