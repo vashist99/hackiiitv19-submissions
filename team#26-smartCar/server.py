@@ -16,8 +16,8 @@ while 1:
     mess = c.recv(1024)
     string = mess.decode('utf-8')
     print(string)
-    mess = str(input())
-    c.send(mess.encode('utf-8'))
+    #mess = str(input())
+    #c.send(mess.encode('utf-8'))
     c.close()
 
 
