@@ -1,8 +1,25 @@
 import socket
 import json
 import _thread
+import threading
 # HOST = '10.42.0.1'
 # PORT = 8005
+
+
+def sends(s1):
+    print("sending...")
+    while 1:
+        mess = str(input())
+        s1.send(mess.encode('utf-8'))
+        print('message sent')
+
+def rec(s1):
+    print("recieving...")
+    while 1:
+        data = s1.recv(1024)
+        print(data.decode('utf-8'))
+
+
 
 s = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
 s.connect(("8.8.8.8", 80))
@@ -22,19 +39,7 @@ for c in range(len(ip[0])):
         break
 main_ip = ip1 + ip2
 #print(main_ip)
-s1.connect((main_ip, 8062))
-
-
-def send(s):
-    while 1:
-        mess = str(input())
-        s.send(mess.encode('utf-8'))
-        print('message sent')
-
-def rec(s):
-    while 1:
-        data = s.recv(1024)
-        print(data.decode('utf-8'))
+s1.connect((main_ip, 8065))
 
 
 #protocol
@@ -44,9 +49,14 @@ s1.sendall(m)
 carData = s1.recv(1024)
 #receiving driver list
 data = json.loads(carData.decode('utf-8'))
-# print(data)
+print(data)
 
-_thread.start_new_thread(send,(s,))
-_thread.start_new_thread(rec,(s,))
 
-s1.close()
+if s1:
+    print("ok")
+    t1 = threading.Thread(target= sends, args=(s1, ))
+    t2 = threading.Thread(target=rec, args=(s1,))
+    t1.start()
+    t2.start()
+
+# s1.close()
