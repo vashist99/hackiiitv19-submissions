@@ -49,8 +49,12 @@ s1.sendall(m)
 carData = s1.recv(1024)
 #receiving driver list
 data = json.loads(carData.decode('utf-8'))
+<<<<<<< HEAD
 print(data)
 
+=======
+#print(data)
+>>>>>>> a51f8ed288591878874a4b99168f901f464d27cd
 
 if s1:
     print("ok")
