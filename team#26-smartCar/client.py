@@ -22,12 +22,12 @@ for c in range(len(ip[0])):
         break
 main_ip = ip1 + ip2
 #print(main_ip)
-s1.connect((main_ip, 8055))
+s1.connect((main_ip, 8062))
 
 
 def send(s):
     while 1:
-        mess = input()
+        mess = str(input())
         s.send(mess.encode('utf-8'))
         print('message sent')
 
@@ -44,9 +44,9 @@ s1.sendall(m)
 carData = s1.recv(1024)
 #receiving driver list
 data = json.loads(carData.decode('utf-8'))
-print(data)
+# print(data)
 
-thread.start_new_thread(send,(s,))
+_thread.start_new_thread(send,(s,))
 _thread.start_new_thread(rec,(s,))
 
 s1.close()

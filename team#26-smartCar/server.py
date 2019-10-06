@@ -35,7 +35,7 @@ def clientThread(conn,addr):
     no = conn.recv(1024)
     d1.update({no:addr})
     carData = json.dumps(d1)
-    conn.send(sarData.encode('utf-8'))
+    conn.send(carData.encode('utf-8'))
     #while 1:
     _thread.start_new_thread(send,(conn,))
     _thread.start_new_thread(rec,(conn,))
