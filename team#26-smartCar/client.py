@@ -44,7 +44,7 @@ s1.sendall(m)
 carData = s1.recv(1024)
 #receiving driver list
 data = json.loads(carData.decode('utf-8'))
-# print(data)
+#print(data)
 
 _thread.start_new_thread(send,(s,))
 _thread.start_new_thread(rec,(s,))

@@ -1,5 +1,5 @@
 import socket
-import _thread
+import threading
 import sys
 import json
 
@@ -7,14 +7,15 @@ import json
 s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 s1 = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 HOST = '10.42.0.1'
-PORT = 8062
+PORT = 8065
 
 # s.bind((HOST,PORT))
 # s.listen(5)
 
 
-def send(conn):
-    conn.send(b'mess')
+def sends(conn):
+    mess = str(input())
+    conn.send(mess.encode('utf-8'))
     print('message sent')
 
 def rec(conn):
@@ -24,7 +25,11 @@ def rec(conn):
         carNo = data[:len(data)-1]
         print(data)
         mess = data[-1:]
-        d[d1[carNo]].send(mess.encode('utf-8'))
+        if carNo in d1.keys():
+            print(carNo)
+            d[d1[carNo]].send(mess.encode('utf-8'))
+        else:
+            print(mess.encode('utf-8'))
         if not data:
             break
     
@@ -34,12 +39,15 @@ d1 = {}
 def clientThread(conn,addr):
     #receives car no
     no = conn.recv(1024)
-    d1.update({no.decode('utf-8'):addr})
+    d1.update({no.decode('utf-8'):addr[0]})
     carData = json.dumps(d1)
     conn.send(carData.encode('utf-8'))
+    print(carData)
     #while 1:
-    _thread.start_new_thread(send,(conn,))
-    _thread.start_new_thread(rec,(conn,))
+    t2 = threading.Thread(target = sends,args=(conn,))
+    t3 = threading.Thread(target = rec,args = (conn,))
+    t2.start()
+    t3.start()
 
 d = {}
 s.bind((HOST,PORT))
@@ -50,8 +58,10 @@ while 1:
     c,addr = s.accept()
     
     #write code to create thread to connect
-    _thread.start_new_thread(clientThread,(c,addr))
+    t1 = threading.Thread(target = clientThread,args = (c,addr))
+    t1.start()
     d.update({addr[0]:c})
+    
     #mess = c.recv(1024)
     #string = mess.decode('utf-8')
     #print(string)
