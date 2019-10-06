@@ -6,8 +6,8 @@ import json
 
 s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 s1 = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-HOST = '127.0.0.1'
-PORT = 8055
+HOST = '10.42.0.1'
+PORT = 8062
 
 # s.bind((HOST,PORT))
 # s.listen(5)
@@ -22,6 +22,7 @@ def rec(conn):
         data = conn.recv(1024)
         data = data.decode('utf-8')
         carNo = data[:len(data)-1]
+        print(data)
         mess = data[-1:]
         d[d1[carNo]].send(mess.encode('utf-8'))
         if not data:
@@ -33,7 +34,7 @@ d1 = {}
 def clientThread(conn,addr):
     #receives car no
     no = conn.recv(1024)
-    d1.update({no:addr})
+    d1.update({no.decode('utf-8'):addr})
     carData = json.dumps(d1)
     conn.send(carData.encode('utf-8'))
     #while 1:
@@ -41,9 +42,11 @@ def clientThread(conn,addr):
     _thread.start_new_thread(rec,(conn,))
 
 d = {}
+s.bind((HOST,PORT))
+s.listen(5)
 while 1:
-    s.bind((HOST,PORT))
-    s.listen(5)
+    # s.bind((HOST,PORT))
+    # s.listen(5)
     c,addr = s.accept()
     
     #write code to create thread to connect
