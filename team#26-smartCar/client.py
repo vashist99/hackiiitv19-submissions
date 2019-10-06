@@ -46,7 +46,7 @@ carData = s1.recv(1024)
 data = json.loads(carData.decode('utf-8'))
 print(data)
 
-thread.start_new_thread(send,(s,))
+_thread.start_new_thread(send,(s,))
 _thread.start_new_thread(rec,(s,))
 
 s1.close()
